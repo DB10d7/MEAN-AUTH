@@ -22,6 +22,35 @@ module.exports.register = (req, res, next) => {
                 return next(err);
         }
 
-    });
+});
+
+module.exports.authenticate = (req, res, next) => {
+    // call for passport authentication
+    passport.authenticate('local', (err, user, info) => {       
+        // error from passport middleware
+        if (err) return res.status(400).json(err);
+        // registered user
+        else if (user) return res.status(200).json({ "token": user.generateJwt() });
+        // unknown user or wrong password
+        else return res.status(404).json(info);
+    })(req, res);
+}
+
+module.exports.userProfile = (req, res, next) =>{
+    User.findOne({ _id: req._id },
+        (err, user) => {
+            if (!user)
+                return res.status(404).json({ status: false, message: 'User record not found.' });
+            else
+                return res.status(200).json({ status: true, user : _.pick(user,['fullName','email']) });
+        }
+    );
+}
+
+
+
+
+
+
 //    console.log("Inside Register ");
 }
