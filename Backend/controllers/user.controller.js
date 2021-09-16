@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-//const passport = require('passport');
-//const _ = require('lodash');
-
+const passport = require('passport');
+const _ = require('lodash');
 const User = mongoose.model('User');
 
 
@@ -21,9 +20,8 @@ module.exports.register = (req, res, next) => {
                // res.status(422).send(err.message);
                 return next(err);
         }
-
-});
-
+    });
+}
 module.exports.authenticate = (req, res, next) => {
     // call for passport authentication
     passport.authenticate('local', (err, user, info) => {       
@@ -53,4 +51,3 @@ module.exports.userProfile = (req, res, next) =>{
 
 
 //    console.log("Inside Register ");
-}
